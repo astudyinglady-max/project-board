@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Board — AI-Native Dev Workflow</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --indigo:#6366f1;--indigo-d:#4f46e5;--indigo-l:#eef2ff;
+  --sky:#0ea5e9;--emerald:#10b981;--amber:#f59e0b;--pink:#ec4899;--purple:#8b5cf6;
+  --gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;
+  --gray-600:#475569;--gray-800:#1e293b;--gray-900:#0f172a;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:var(--gray-800);line-height:1.6}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-logo{font-size:16px;font-weight:800;color:var(--gray-900);display:flex;align-items:center;gap:8px}
+.nav-logo span{background:var(--indigo);color:#fff;border-radius:8px;padding:3px 8px;font-size:13px}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-link{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--gray-600);transition:all .15s}
+.nav-link:hover{background:var(--gray-100);color:var(--gray-800)}
+.nav-link.highlight{color:var(--indigo)}
+.nav-cta{background:var(--indigo);color:#fff!important;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:background .15s}
+.nav-cta:hover{background:var(--indigo-d)}
+
+.hero{background:linear-gradient(135deg,#eef2ff 0%,#f0f9ff 50%,#f0fdf4 100%);padding:80px 24px 60px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--gray-200);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--indigo);margin-bottom:24px}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;color:var(--gray-900);line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--indigo),var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:clamp(14px,2vw,18px);color:var(--gray-600);max-width:600px;margin:0 auto 8px}
+.hero-ko{font-size:14px;color:var(--gray-400);margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;border:none;transition:all .15s}
+.btn-primary{background:var(--indigo);color:#fff}
+.btn-primary:hover{background:var(--indigo-d);transform:translateY(-1px)}
+.btn-outline{background:#fff;color:var(--gray-800);border:1.5px solid var(--gray-200)}
+.btn-outline:hover{border-color:var(--indigo);color:var(--indigo)}
+.btn-green{background:var(--emerald);color:#fff}
+.btn-green:hover{background:#059669;transform:translateY(-1px)}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap}
+.hero-stat .num{font-size:28px;font-weight:800;color:var(--gray-900)}
+.hero-stat .lbl{font-size:12px;color:var(--gray-400);margin-top:2px}
+
+/* TOOLS SECTION */
+.tools{padding:48px 24px;background:#fff;max-width:900px;margin:0 auto}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.tool-card{border-radius:14px;border:1.5px solid var(--gray-200);padding:22px;display:flex;flex-direction:column;gap:12px;transition:all .15s}
+.tool-card:hover{border-color:var(--indigo);box-shadow:0 4px 16px rgba(99,102,241,.1);transform:translateY(-2px)}
+.tool-icon{font-size:28px}
+.tool-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.tool-desc{font-size:13px;color:var(--gray-600);line-height:1.5;flex:1}
+.tool-ko{font-size:12px;color:var(--gray-400)}
+.tool-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.tool-btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:all .15s}
+.tool-btn-primary{background:var(--indigo);color:#fff}
+.tool-btn-primary:hover{background:var(--indigo-d)}
+.tool-btn-outline{background:#fff;color:var(--gray-600);border:1px solid var(--gray-200)}
+.tool-btn-outline:hover{border-color:var(--indigo);color:var(--indigo)}
+.tool-btn-green{background:var(--emerald);color:#fff}
+.tool-btn-green:hover{background:#059669}
+
+/* PREVIEW */
+.preview{padding:0 24px 40px;background:#fff;max-width:900px;margin:0 auto}
+.preview-wrap{background:var(--gray-900);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.preview-bar{background:#1e293b;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%}
+.preview-url{background:#0f172a;color:var(--gray-400);font-size:11px;padding:3px 12px;border-radius:4px;margin-left:8px}
+.preview-screen{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.mock-card{background:#1e293b;border-radius:10px;padding:14px;border:1px solid #334155}
+.mock-card-title{font-size:12px;font-weight:700;color:#e2e8f0;margin-bottom:8px}
+.mock-bar-wrap{background:#0f172a;border-radius:999px;height:5px;margin-bottom:6px}
+.mock-bar-fill{height:100%;border-radius:999px}
+.mock-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;margin-top:4px}
+.mock-steps{margin-top:8px}
+.mock-step{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:10px;color:#94a3b8;border-bottom:1px solid #334155}
+.mock-check{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+.features{background:var(--gray-50);padding:60px 24px}
+.section-label{text-align:center;font-size:12px;font-weight:700;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.section-title{text-align:center;font-size:clamp(22px,4vw,34px);font-weight:800;color:var(--gray-900);margin-bottom:8px}
+.section-sub{text-align:center;font-size:14px;color:var(--gray-400);margin-bottom:40px}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:900px;margin:0 auto}
+.feat-card{background:#fff;border-radius:12px;border:1px solid var(--gray-200);padding:20px}
+.feat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.feat-card h3{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:6px}
+.feat-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
+.feat-card .ko{font-size:11px;color:var(--gray-400);margin-top:4px}
+
+.how{padding:60px 24px;max-width:800px;margin:0 auto}
+.steps-flow{display:flex;flex-direction:column;gap:0}
+.flow-step{display:flex;gap:20px;position:relative}
+.flow-step:not(:last-child)::after{content:'';position:absolute;left:19px;top:44px;bottom:-16px;width:2px;background:var(--gray-200)}
+.flow-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;z-index:1}
+.flow-body{padding-bottom:28px;flex:1}
+.flow-body h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.flow-body p{font-size:13px;color:var(--gray-600)}
+.flow-body .ko{font-size:12px;color:var(--gray-400);margin-top:4px}
+
+.install{background:var(--gray-900);padding:60px 24px;text-align:center}
+.install h2{font-size:clamp(20px,3vw,30px);font-weight:800;color:#fff;margin-bottom:8px}
+.install p{color:var(--gray-400);font-size:14px;margin-bottom:32px}
+.install-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:800px;margin:0 auto 32px}
+.install-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;text-align:left}
+.install-card h4{font-size:13px;font-weight:700;color:#e2e8f0;margin-bottom:12px}
+.install-card pre{font-size:11px;color:#86efac;font-family:monospace;line-height:1.7;white-space:pre-wrap}
+.install-card .comment{color:#64748b}
+.copy-btn{background:#334155;color:#e2e8f0;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;margin-top:10px;transition:background .15s}
+.copy-btn:hover{background:#475569}
+
+footer{background:var(--gray-900);border-top:1px solid #1e293b;padding:24px;text-align:center;color:var(--gray-400);font-size:12px}
+footer a{color:var(--indigo);text-decoration:none}
+
+.dl-float{position:fixed;bottom:24px;right:24px;z-index:200}
+.dl-float a{display:flex;align-items:center;gap:8px;background:var(--indigo);color:#fff;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(99,102,241,.4);transition:all .15s}
+.dl-float a:hover{background:var(--indigo-d);transform:translateY(-2px)}
+
+@media(max-width:600px){
+  .preview-screen{grid-template-columns:1fr}
+  .hero-stats{gap:20px}
+  nav .nav-links .nav-link{display:none}
+  nav .nav-links .nav-cta{display:flex}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>⚡</span> Project Board</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#how">How it works</a>
+    <a class="nav-link" href="#install">Install</a>
+    <a class="nav-link highlight" href="/docs/workflow.html" target="_blank">📋 작업 순서</a>
+    <a class="nav-link highlight" href="project-board.html" target="_blank">🎮 체험하기</a>
+    <a class="nav-cta" href="https://github.com/astudyinglady-max/clauce-commin-kit" target="_blank">GitHub →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">⚡ AI-Native Dev Workflow Tool</div>
+  <h1>Manage your sprint.<br><em>Ship with confidence.</em></h1>
+  <p class="hero-sub">클로드 코드 워크플로우를 인터랙티브 프로젝트 보드로 변환하는 툴킷으로, 설정도 서버도 필요 없습니다.</p>
+  <p class="hero-ko">Claude Code 작업 순서를 팀과 함께 관리하는 프로젝트 보드 · 설치 없이 HTML 파일 하나로 시작</p>
+  <div class="hero-btns">
+    <a class="btn btn-primary" href="project-board.html" download>⬇ Download project-board.html</a>
+    <a class="btn btn-green" href="project-board.html" target="_blank">🎮 체험하기</a>
+    <a class="btn btn-outline" href="https://github.com/astudyinglady-max/clauce-commin-kit" target="_blank">⭐ GitHub</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">3</div><div class="lbl">HTML Files</div></div>
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">Sprint Phases</div></div>
+    <div class="hero-stat"><div class="num">30+</div><div class="lbl">Checklist Steps</div></div>
+    <div class="hero-stat"><div class="num">0</div><div class="lbl">Dependencies</div></div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section style="padding:48px 24px;background:#fff">
+  <div class="section-label">What's included</div>
+  <h2 class="section-title">포함된 도구</h2>
+  <p class="section-sub">3개의 HTML 파일로 구성된 완전한 AI-Native 개발 워크플로우 킷</p>
+  <div class="tools-grid" style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+    <div class="tool-card">
+      <div class="tool-icon">📋</div>
+      <div class="tool-title">Claude Code 작업 순서 v5</div>
+      <div class="tool-desc">기획부터 배포까지 6단계 작업 순서. 단계별 프롬프트 예시, QC 체크리스트, Git 명령어, 진행 기록까지 한 파일에.</div>
+      <div class="tool-ko">workflow.html · localStorage 상태 저장</div>
+      <div class="tool-btns">
+        <a class="tool-btn tool-btn-primary" href="workflow.html" target="_blank">📋 열어보기</a>
+        <a class="tool-btn tool-btn-outline" href="workflow.html" download>⬇ 다운로드</a>
+      </div>
+    </div>
+    <div class="tool-card" style="border-color:var(--indigo)">
+      <div class="tool-icon">📊</div>
+      <div class="tool-title">Project Board</div>
+      <div class="tool-desc">여러 프로젝트를 동시에 관리하는 인터랙티브 보드. 담당자 지정, 메모, 코멘트, 진행률 대시보드 포함.</div>
+      <div class="tool-ko">project-board.html · localStorage 상태 저장</div>
+      <div class="tool-btns">
+        <a class="tool-btn tool-btn-green" href="/docs/index.html" target="_blank">🎮 체험하기</a>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🌐</div>
+      <div class="tool-title">Landing Page</div>
+      <div class="tool-desc">지금 보고 계신 이 페이지. 팀원에게 도구를 소개하고 다운로드 링크를 공유할 수 있는 랜딩 페이지.</div>
+      <div class="tool-ko">docs/index.html · GitHub Pages 배포용</div>
+      <div class="tool-btns">
+        <a class="tool-btn tool-btn-outline" href="https://github.com/astudyinglady-max/clauce-commin-kit" target="_blank">⭐ GitHub에서 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW MOCKUP -->
+<section class="preview">
+  <div class="preview-wrap">
+    <div class="preview-bar">
+      <div class="dot" style="background:#ef4444"></div>
+      <div class="dot" style="background:#f59e0b"></div>
+      <div class="dot" style="background:#10b981"></div>
+      <div class="preview-url">project-board.html</div>
+    </div>
+    <div class="preview-screen">
+      <div class="mock-card">
+        <div class="mock-card-title">🛍 쇼핑몰 리뉴얼</div>
+        <div class="mock-bar-wrap"><div class="mock-bar-fill" style="width:72%;background:linear-gradient(90deg,#6366f1,#0ea5e9)"></div></div>
+        <div style="font-size:10px;color:#94a3b8">22/30 완료 · 72%</div>
+        <div class="mock-tag" style="background:#dbeafe;color:#1d4ed8">진행중</div>
+        <div class="mock-steps">
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>기획 QC 완료</div>
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>디자인 시스템</div>
+          <div class="mock-step"><div class="mock-check" style="border:1.5px solid #475569"></div>프론트 단위 테스트</div>
+        </div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-card-title">📱 앱 개발 v2</div>
+        <div class="mock-bar-wrap"><div class="mock-bar-fill" style="width:40%;background:linear-gradient(90deg,#ec4899,#8b5cf6)"></div></div>
+        <div style="font-size:10px;color:#94a3b8">12/30 완료 · 40%</div>
+        <div class="mock-tag" style="background:#dbeafe;color:#1d4ed8">진행중</div>
+        <div class="mock-steps">
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>Git 초기화</div>
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>요구사항 정의</div>
+          <div class="mock-step"><div class="mock-check" style="border:1.5px solid #475569"></div>차별화 문서</div>
+        </div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-card-title">🏢 사내 툴 개선</div>
+        <div class="mock-bar-wrap"><div class="mock-bar-fill" style="width:100%;background:#10b981"></div></div>
+        <div style="font-size:10px;color:#94a3b8">30/30 완료 · 100%</div>
+        <div class="mock-tag" style="background:#dcfce7;color:#15803d">완료</div>
+        <div class="mock-steps">
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>E2E 테스트</div>
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>스프린트 회고</div>
+          <div class="mock-step"><div class="mock-check" style="background:#10b981"></div>main 머지 & 배포</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Everything your team needs</h2>
+  <p class="section-sub">주요 기능 · 팀 협업에 필요한 모든 것</p>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#eef2ff">📊</div>
+      <h3>Project Dashboard</h3>
+      <p>Track multiple projects with real-time progress bars and status badges.</p>
+      <p class="ko">여러 프로젝트를 진행률 대시보드로 한눈에 관리</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#f0fdf4">✅</div>
+      <h3>Sprint Checklist</h3>
+      <p>30+ step checklist covering Planning → Design → Frontend → Backend → Deploy.</p>
+      <p class="ko">기획부터 배포까지 30개+ 체크리스트 단계</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#fdf2f8">👤</div>
+      <h3>Role Assignment</h3>
+      <p>Assign each step to 기획 / 디자인 / 프론트 / 백엔드 roles.</p>
+      <p class="ko">각 단계에 담당 포지션 지정 가능</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#fffbeb">💬</div>
+      <h3>Memo & Comments</h3>
+      <p>Leave memos and threaded comments on every step.</p>
+      <p class="ko">단계별 메모와 코멘트로 의사결정 기록</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#f0f9ff">💾</div>
+      <h3>Auto Save</h3>
+      <p>All progress saved automatically to localStorage. Refresh-safe.</p>
+      <p class="ko">새로고침해도 진행 상태 자동 저장 유지</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#f5f3ff">📋</div>
+      <h3>Prompt Library</h3>
+      <p>Copy-ready Claude Code prompts for every step. Just paste and run.</p>
+      <p class="ko">단계별 Claude Code 프롬프트 예시 복사 버튼</p>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title" style="text-align:center;margin-bottom:8px">사용 방법</h2>
+  <p style="text-align:center;font-size:14px;color:var(--gray-400);margin-bottom:40px">3 steps to get started · 3단계로 시작</p>
+  <div class="steps-flow">
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--indigo)">1</div>
+      <div class="flow-body">
+        <h3>Download the files</h3>
+        <p>Download <code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">project-board.html</code> and <code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">workflow.html</code> and save them anywhere.</p>
+        <p class="ko">두 파일을 다운로드해서 프로젝트 폴더에 저장하세요.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--sky)">2</div>
+      <div class="flow-body">
+        <h3>Open in browser & start</h3>
+        <p>Double-click to open in browser. Progress is saved automatically to localStorage.</p>
+        <p class="ko">브라우저로 열고 바로 시작. 진행 상태는 자동 저장돼요.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--emerald)">3</div>
+      <div class="flow-body">
+        <h3>Share with your team via GitHub Pages</h3>
+        <p>Put the files in <code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">/docs</code> and enable GitHub Pages for team access.</p>
+        <p class="ko">GitHub Pages로 배포하면 팀원 누구나 URL로 접속 가능해요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="install" id="install">
+  <h2>GitHub Pages 배포 방법</h2>
+  <p>Deploy in 2 minutes · 2분 안에 팀과 공유</p>
+  <div class="install-cards">
+    <div class="install-card">
+      <h4>① 파일 추가 & Push</h4>
+      <pre><span class="comment"># 저장소 클론</span>
+git clone https://github.com/
+  astudyinglady-max/
+  clauce-commin-kit.git
+cd clauce-commin-kit
+
+<span class="comment"># docs 폴더에 파일 저장</span>
+mkdir docs
+<span class="comment"># index.html     ← 랜딩 페이지</span>
+<span class="comment"># project-board.html ← 프로젝트 보드</span>
+<span class="comment"># workflow.html  ← 작업 순서 v5</span>
+
+git add docs/
+git commit -m "docs: add toolkit"
+git push origin main</pre>
+      <button class="copy-btn" onclick="copyText(this,'git clone https://github.com/astudyinglady-max/clauce-commin-kit.git\ncd clauce-commin-kit\nmkdir docs\ngit add docs/\ngit commit -m \"docs: add toolkit\"\ngit push origin main')">복사</button>
+    </div>
+    <div class="install-card">
+      <h4>② GitHub Pages 설정</h4>
+      <pre><span class="comment"># GitHub 저장소에서:</span>
+1. Settings 클릭
+2. Pages 메뉴 이동
+3. Source:
+   Deploy from branch
+4. Branch: main
+   Folder: /docs
+5. Save 클릭
+
+<span class="comment"># 배포 완료 후 접속:</span>
+https://astudyinglady-max
+  .github.io/clauce-commin-kit
+
+<span class="comment"># 각 파일 직접 접속:</span>
+/project-board.html
+/workflow.html</pre>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a class="btn btn-primary" href="project-board.html" download>⬇ project-board.html</a>
+    <a class="btn btn-outline" style="border-color:#334155" href="workflow.html" download>⬇ workflow.html</a>
+    <a class="btn btn-outline" style="border-color:#334155" href="https://github.com/astudyinglady-max/clauce-commin-kit" target="_blank">⭐ GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <p>Made with ⚡ Claude Code · <a href="https://github.com/astudyinglady-max/clauce-commin-kit" target="_blank">GitHub</a> · Free & Open Source</p>
+  <p style="margin-top:6px;color:#475569">완전 무료이며 자유롭게 사용하실 수 있어요.</p>
+</footer>
+
+<div class="dl-float">
+  <a href="/docs/index.html" target="_blank">🎮 체험하기</a>
+</div>
+
+<script>
+function copyText(btn,text){
+  navigator.clipboard.writeText(text);
+  btn.textContent='✓ 복사됨';
+  setTimeout(()=>btn.textContent='복사',1500);
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href');
+    if(id==='#') return;
+    e.preventDefault();
+    document.querySelector(id)?.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>

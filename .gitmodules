@@ -1,0 +1,3 @@
+[submodule "project-board/.kit"]
+	path = project-board/.kit
+	url = https://github.com/astudyinglady-max/claude-commin-kit.git
