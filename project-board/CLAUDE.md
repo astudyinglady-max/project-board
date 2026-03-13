@@ -204,6 +204,20 @@ JS 파일:     camelCase.mjs           (예: cli.mjs)
 
 ## 6. PR / 커밋 규칙
 
+### Claude Code 스킬 명령어
+
+Git 작업은 아래 스킬 명령어를 우선 사용합니다:
+
+| 스킬 | 명령어 | 용도 |
+|------|--------|------|
+| 브랜치 생성/관리 | `/git:branch` | 브랜치 생성, 전환, 삭제 |
+| 커밋 생성 | `/git-commit` | 이모지 컨벤셔널 커밋 자동 생성 |
+| PR 생성 | `/git:pr` | Pull Request 자동 생성 |
+| PR 코드 리뷰 | `/review-pr` | 변경사항 코드 리뷰 |
+| 브랜치 병합 | `/git:merge` | 안전한 브랜치 병합 |
+
+> Phase 단위 브랜치 관리는 워크플로우 CLI(`node kit/cli.mjs git-start/finish`)를 함께 사용할 수 있습니다.
+
 ### 브랜치 전략
 
 ```
@@ -215,42 +229,49 @@ feat/프론트-스프린트1
 feat/백엔드-스프린트1
 ```
 
-브랜치 생성은 CLI 명령어를 사용합니다:
+브랜치 생성 방법 (두 방법 모두 사용 가능):
 ```bash
-node kit/cli.mjs git-start <phase-id>   # 브랜치 생성
-node kit/cli.mjs git-finish <phase-id>  # commit + push
+# 스킬 사용 (권장 — 안전 점검 + stash 자동 처리)
+/git:branch feat/기획-스프린트1
+
+# 워크플로우 CLI 사용 (Phase 연동 시)
+node kit/cli.mjs git-start <phase-id>
 ```
 
 ### 커밋 메시지 컨벤션
 
 ```
-<타입>: <한 줄 요약> (50자 이내)
+<이모지> <타입>: <한 줄 요약> (72자 이내)
 
 [선택] 본문 — 변경 이유, 결정 배경 (72자 줄바꿈)
 ```
 
-| 타입 | 사용 상황 |
-|------|----------|
-| `feat` | 새 기능 추가 |
-| `fix` | 버그 수정 |
-| `docs` | 문서 추가/수정 (`.md` 파일) |
-| `style` | CSS, 레이아웃 변경 (기능 변경 없음) |
-| `refactor` | 기능 변경 없이 코드 구조 개선 |
-| `chore` | 빌드, 설정, CLI 관련 변경 |
-| `test` | 테스트 추가/수정 |
+| 타입 | 이모지 | 사용 상황 |
+|------|--------|----------|
+| `feat` | ✨ | 새 기능 추가 |
+| `fix` | 🐛 | 버그 수정 |
+| `docs` | 📝 | 문서 추가/수정 (`.md` 파일) |
+| `style` | 💄 | CSS, 레이아웃 변경 (기능 변경 없음) |
+| `refactor` | ♻️ | 기능 변경 없이 코드 구조 개선 |
+| `chore` | 🔧 | 빌드, 설정, CLI 관련 변경 |
+| `test` | ✅ | 테스트 추가/수정 |
 
 **예시:**
 ```
-docs: 요구사항, 유저스토리, 차별화 문서 추가 (p1s1)
-feat: 프로젝트 보드 JSON 백업/복원 기능 추가
-fix: workflow.html 상태 저장 누락 버그 수정
-style: 랜딩 페이지 hero 섹션 모바일 반응형 적용
-chore: .workflow/config.json 프로젝트명 업데이트
+📝 docs: 요구사항, 유저스토리, 차별화 문서 추가 (p1s1)
+✨ feat: 프로젝트 보드 JSON 백업/복원 기능 추가
+🐛 fix: workflow.html 상태 저장 누락 버그 수정
+💄 style: 랜딩 페이지 hero 섹션 모바일 반응형 적용
+🔧 chore: .workflow/config.json 프로젝트명 업데이트
 ```
+
+> `/git-commit` 스킬이 diff를 분석해 이모지와 메시지를 자동 생성합니다. 직접 작성 시 위 형식을 따릅니다.
 
 ### PR 규칙
 
-- **제목**: 커밋 타입과 동일한 prefix 사용, 50자 이내
+- **생성**: `/git:pr` 스킬 사용 — 커밋 히스토리 기반으로 제목/설명 자동 생성
+- **리뷰**: `/review-pr` 스킬 사용 — 버그·보안·성능·코드 품질 4가지 관점으로 검토
+- **제목**: 커밋 타입과 동일한 prefix 사용, 72자 이내
 - **본문**: 변경 내용 요약 (bullet), 테스트 방법, 스크린샷 (UI 변경 시)
 - **머지 대상**: feature → `develop`, sprint 완료 후 `develop` → `main`
 - **직접 push 금지**: `main` 브랜치에는 PR 없이 직접 push하지 않음

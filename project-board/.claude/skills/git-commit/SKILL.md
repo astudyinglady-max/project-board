@@ -1,11 +1,4 @@
 ---
-commit:*)
-argument-hint: [message]
-desgription : git 커밋 생성
----
-
-커밋 메시지 : $ARGUMENTS
-현재 변경사항을 분석하고 커밋을 생성해주세요---
 description: '이모지와 컨벤셔널 커밋 메시지로 잘 포맷된 커밋을 생성합니다'
 allowed-tools:
   [
