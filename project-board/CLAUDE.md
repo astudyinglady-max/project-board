@@ -105,6 +105,8 @@ project-board/
 │   ├── status.md            # 자동 생성 ← 직접 수정 금지
 │   └── templates/           # Step별 문서 템플릿 (.tmpl)
 │
+├── style/                   # 외부 CSS 파일
+│   └── project-board.css    # project-board.html 전용 스타일시트
 ├── agents/                  # Claude Code 에이전트 정의
 ├── skills/                  # Claude Code 슬래시 커맨드 스킬
 └── sprint/                  # 스프린트별 로그 및 이슈 목록
@@ -158,12 +160,26 @@ JS 파일:     camelCase.mjs           (예: cli.mjs)
 
 > 새 localStorage 키를 추가할 때는 이 표에 반드시 기록합니다.
 
+### CSS 파일 분리 규칙
+
+`style/` 디렉토리에 파일명을 맞춰 CSS를 관리합니다:
+
+| HTML 파일 | CSS 파일 | 임포트 방식 |
+|-----------|----------|------------|
+| `project-board.html` | `style/project-board.css` | `<link rel="stylesheet" href="style/project-board.css">` |
+| `docs/index.html` | `style/index.css` (필요 시) | `<link rel="stylesheet" href="../style/index.css">` |
+| `docs/workflow.html` | `style/workflow.css` (필요 시) | `<link rel="stylesheet" href="../style/workflow.css">` |
+
+> `docs/` 하위 파일은 `../style/` 상대 경로를 사용합니다.
+> 단발성 오버라이드가 필요한 경우에만 `<style>` 태그를 `<head>` 안에 추가로 허용합니다.
+
 ### HTML 파일 내 구조 순서
 
 ```html
-1. <style>   — 모든 CSS를 <head> 내 <style> 태그에 집중
-2. <body>    — 마크업
-3. <script>  — </body> 직전에 JS 위치, 모듈 스크립트 사용 금지 (type="module" 지양)
+1. <link rel="stylesheet">  — <head> 안에 외부 CSS 임포트
+2. <style>                  — 해당 페이지 전용 오버라이드만 (선택, 최소화)
+3. <body>                   — 마크업
+4. <script>                 — </body> 직전에 JS 위치, 모듈 스크립트 사용 금지 (type="module" 지양)
 ```
 
 ---
