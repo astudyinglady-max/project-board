@@ -157,7 +157,7 @@ function confirm(question) {
 // ─── Commands ────────────────────────────────────────────────────────────────
 
 function cmdInit() {
-  let created = [];
+  const created = [];
 
   if (!fs.existsSync(WORKFLOW_DIR)) {
     fs.mkdirSync(WORKFLOW_DIR, { recursive: true });
