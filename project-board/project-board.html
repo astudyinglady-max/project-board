@@ -24,8 +24,8 @@
 <section class="hero">
   <div class="hero-badge">⚡ Claude Code 워크플로우 가이드 CLI</div>
   <h1>다음에 뭘 해야 하지?<br><em>이제 걱정 없습니다.</em></h1>
-  <p class="hero-sub">Claude Code로 개발할 때 기획부터 배포까지 단계를 놓치지 않게 도와주는 워크플로우 가이드 CLI</p>
-  <p class="hero-ko">요구사항 → 디자인 → 개발 → 테스트 → 배포 순서를 자동 안내 · CLAUDE.md에 다음 할 일 자동 주입</p>
+  <p class="hero-sub">AI(Claude)랑 앱 만들 때, 다음에 뭘 해야 할지 자동으로 알려주는 도구예요.</p>
+  <p class="hero-ko">"기획 → 디자인 → 개발 → 테스트 → 배포" 순서를 잊지 않게 계속 안내해드려요.</p>
   <div class="hero-btns">
     <a class="btn btn-primary" href="#install">⚡ 시작하기 (npx)</a>
     <a class="btn btn-green" href="docs/index.html" target="_blank">🎮 대시보드 체험</a>
@@ -154,38 +154,38 @@
     <div class="feat-card">
       <div class="feat-icon" style="background:#eef2ff">📋</div>
       <h3>6 Phase 워크플로우</h3>
-      <p>Git 초기화 → 기획 → 디자인 → 프론트 → 백엔드 → 마무리, 6단계를 순서대로 진행.</p>
-      <p class="ko">각 Phase는 구체적인 Step과 Claude Code 프롬프트 예시 제공</p>
+      <p>앱 만들 때 해야 할 일을 6단계로 나눠놨어요. 순서대로만 따라가면 빠뜨리는 게 없어요.</p>
+      <p class="ko">각 단계마다 해야 할 일과 Claude에게 할 말이 자동으로 준비돼 있어요</p>
     </div>
     <div class="feat-card">
       <div class="feat-icon" style="background:#f0fdf4">🎯</div>
       <h3>다음 할 일 안내</h3>
-      <p><code>npx claude-code-kit next</code> — 다음 Step과 프롬프트를 즉시 출력. 복사해서 붙여넣기만 하면 됩니다.</p>
-      <p class="ko">매번 "다음에 뭘 해야 하지?" 고민 없이 바로 시작</p>
+      <p><code>npx claude-code-kit next</code> — '지금 뭘 해야 하는지' + '어떻게 말하면 되는지'까지 바로 알려줘요.</p>
+      <p class="ko">복사해서 붙여넣기만 하면 됩니다</p>
     </div>
     <div class="feat-card">
       <div class="feat-icon" style="background:#fdf2f8">🤖</div>
       <h3>CLAUDE.md 자동 주입</h3>
-      <p>Step 완료 시마다 CLAUDE.md에 다음 할 일이 자동 삽입. 새 세션에서도 컨텍스트 유지.</p>
-      <p class="ko">별도로 next를 실행하지 않아도 바로 시작 가능</p>
+      <p>Claude를 새로 열어도 할 일이 이미 적혀 있어요. 매번 처음부터 설명할 필요 없어요.</p>
+      <p class="ko">새 세션에서도 바로 이어서 시작 가능</p>
     </div>
     <div class="feat-card">
       <div class="feat-icon" style="background:#fffbeb">✅</div>
       <h3>QC 체크리스트</h3>
-      <p><code>npx claude-code-kit qc 1</code> — Phase 완료 전 품질 검토 체크리스트와 Claude Code 프롬프트 자동 생성.</p>
-      <p class="ko">★QA 단계에서 빠뜨리기 쉬운 검토 항목을 자동 안내</p>
+      <p>단계를 마치기 전에 "이것도 확인했어?"를 자동으로 물어봐줘요.</p>
+      <p class="ko">빠뜨리기 쉬운 항목을 자동으로 안내해줘요</p>
     </div>
     <div class="feat-card">
       <div class="feat-icon" style="background:#f0f9ff">🔀</div>
       <h3>Git 자동화</h3>
-      <p><code>git-start</code>로 feature 브랜치 생성, <code>git-finish</code>로 커밋 + 푸시 완료.</p>
-      <p class="ko">Phase별 브랜치명·커밋 메시지 컨벤션 자동 적용</p>
+      <p>저장하고 올리는 것도 명령어 하나로! 이름 짓는 규칙도 자동이에요.</p>
+      <p class="ko">브랜치 이름·커밋 메시지 컨벤션 자동 적용</p>
     </div>
     <div class="feat-card">
       <div class="feat-icon" style="background:#f5f3ff">📈</div>
       <h3>진행 상태 추적</h3>
-      <p><code>npx claude-code-kit status</code> — 전체 진행률과 Phase별 완료 현황을 터미널에 출력.</p>
-      <p class="ko">어디까지 했는지 한눈에 확인 · 웹 대시보드와 자동 연동</p>
+      <p>지금 몇 % 됐는지, 어디까지 했는지 한눈에 볼 수 있어요.</p>
+      <p class="ko">웹 대시보드와 자동 연동 · 터미널에서도 확인 가능</p>
     </div>
   </div>
 </section>
@@ -198,25 +198,25 @@
     <div class="flow-step">
       <div class="flow-num" style="background:var(--indigo)">1</div>
       <div class="flow-body">
-        <h3>초기화 — <code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">npx claude-code-kit init</code></h3>
-        <p>프로젝트 이름과 기술 스택(Next.js, React+FastAPI 등)을 선택하면 세팅 완료. 첫 번째 할 일이 CLAUDE.md에 자동 주입됩니다.</p>
-        <p class="ko">4가지 기술 스택 템플릿 · 맞춤 프롬프트 자동 생성</p>
+        <h3>딱 한 번만 — 내 프로젝트 이름 입력하기</h3>
+        <p>터미널에서 딱 한 줄만 치면 돼요. 이름이랑 어떤 앱 만들건지만 고르면 자동으로 세팅 끝!</p>
+        <p class="ko"><code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">npx claude-code-kit init</code> · 4가지 기술 스택 템플릿 제공</p>
       </div>
     </div>
     <div class="flow-step">
       <div class="flow-num" style="background:var(--sky)">2</div>
       <div class="flow-body">
-        <h3>Claude Code 열기 → 프롬프트 실행</h3>
-        <p>CLAUDE.md를 읽으면 다음 단계와 Claude Code 프롬프트가 이미 준비돼 있습니다. 복사해서 붙여넣고 실행.</p>
+        <h3>Claude에게 물어보기 — 이미 할 일이 준비돼 있어요</h3>
+        <p>Claude Code를 열면 '지금 뭐 해야 하는지'가 이미 적혀 있어요. 그걸 복사해서 붙여넣기만 하면 됩니다.</p>
         <p class="ko">"다음에 뭘 해야 하지?" 고민 없이 바로 시작</p>
       </div>
     </div>
     <div class="flow-step">
       <div class="flow-num" style="background:var(--emerald)">3</div>
       <div class="flow-body">
-        <h3>완료 처리 → 자동 업데이트</h3>
-        <p><code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">npx claude-code-kit complete p1s1</code> 실행하면 CLAUDE.md가 다음 단계로 자동 업데이트. Phase 0부터 5까지 반복.</p>
-        <p class="ko">각 Phase 완료 시 QC 체크리스트 + Git 자동화 연계</p>
+        <h3>다 했으면 완료! — 다음 할 일이 자동으로 바뀌어요</h3>
+        <p><code style="background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:12px">complete</code> 명령어 한 번이면 다음 할 일로 자동으로 넘어가요. 6단계 끝까지 이 과정을 반복!</p>
+        <p class="ko">각 단계 완료 시 점검 목록 + Git 저장 자동 연계</p>
       </div>
     </div>
   </div>
@@ -228,32 +228,32 @@
   <div class="install-cards">
     <div class="install-card">
       <h4>① 초기화</h4>
-      <pre><span class="comment"># Node.js 18+ 필요</span>
+      <pre><span class="comment"># Node.js 18 이상이 설치되어 있어야 해요</span>
 npx claude-code-kit init
 
-<span class="comment"># 질문에 답하면 세팅 완료:</span>
+<span class="comment"># 아래 질문에 답하면 세팅 끝!</span>
 프로젝트 이름: My App
 기술 스택:
   [1] Next.js + Express
   [2] Next.js 풀스택
   [3] React + FastAPI
-  [4] 커스텀
+  [4] 직접 입력
 
-<span class="comment"># CLAUDE.md에 첫 할 일 자동 주입 ✓</span></pre>
+<span class="comment"># 끝! 첫 번째 할 일이 자동으로 준비됩니다 ✓</span></pre>
       <button class="copy-btn" onclick="copyText(this,'npx claude-code-kit init')">복사</button>
     </div>
     <div class="install-card">
       <h4>② 개발 시작</h4>
-      <pre><span class="comment"># 다음 할 일 확인</span>
+      <pre><span class="comment"># 다음에 뭘 해야 하는지 알려줘</span>
 npx claude-code-kit next
 
-<span class="comment"># Step 완료 처리</span>
+<span class="comment"># 이번 단계 완료했을 때 (예: 1단계-1번)</span>
 npx claude-code-kit complete p1s1
 
-<span class="comment"># 전체 진행 상태 확인</span>
+<span class="comment"># 전체 진행 상황 보기</span>
 npx claude-code-kit status
 
-<span class="comment"># QC 체크리스트 (Phase 완료 전)</span>
+<span class="comment"># 단계 마무리 전 점검 목록 보기</span>
 npx claude-code-kit qc 1</pre>
       <button class="copy-btn" onclick="copyText(this,'npx claude-code-kit next\nnpx claude-code-kit complete p1s1\nnpx claude-code-kit status')">복사</button>
     </div>
