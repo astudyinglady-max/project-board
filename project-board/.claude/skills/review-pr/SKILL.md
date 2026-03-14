@@ -29,8 +29,8 @@ allowed-tools:
 ### 1. 변경사항 수집
 
 ```bash
-git diff main...HEAD
-git log main...HEAD --oneline
+git diff master...HEAD
+git log master...HEAD --oneline
 git status
 ```
 
@@ -89,5 +89,5 @@ git status
 ## 참고사항
 
 - 변경사항이 없으면 "리뷰할 변경사항이 없습니다" 안내
-- `main` 브랜치 기준으로 diff 실행 (없으면 `master` 시도)
+- `master` 브랜치 기준으로 diff 실행
 - 파일이 너무 많으면 핵심 변경사항에 집중
