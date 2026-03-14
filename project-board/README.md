@@ -167,11 +167,42 @@ node kit/cli.mjs sync
 
 ---
 
+## 테스트 전략
+
+| 구분 | 내용 |
+|------|------|
+| **E2E** | Playwright — `tests/e2e/` (landing 6, workflow 19, project-board 17 = **42개**). 모바일 375px 시나리오 포함. |
+| **실행** | `npm test` (로컬 서버 자동 기동) / CI에서 PR·푸시 시 자동 실행. |
+| **단위 테스트** | 현재 없음. 정적 HTML/JS·빌드 없음 구조라 선택 도입 예정. |
+| **커버리지** | E2E는 시나리오 커버리지(랜딩·워크플로우·보드 핵심 플로우). 수치 리포트는 미도입. |
+
+```bash
+npm test              # E2E 전체 실행
+npm run test:ui       # UI 모드
+npm run test:report   # HTML 리포트 확인
+```
+
+---
+
+## CI/CD 및 자동화
+
+워크플로우는 **저장소 루트** `.github/workflows/` 에 있습니다 (이 프로젝트는 루트에 `project-board/` 폴더가 있는 구조).
+
+| 파일 | 트리거 | 내용 |
+|------|--------|------|
+| **ci.yml** | PR/푸시 (master, main, develop) | ESLint + Playwright E2E. `project-board/` 기준 실행. |
+| **deploy.yml** | 푸시 (master, main) | GitHub Pages 자동 배포 (upload-pages-artifact → deploy-pages). |
+
+- **ESLint**: `npm run lint` — CI의 lint job에서 `--max-warnings 0`으로 실행.
+- **배포**: Settings → Pages → Source를 **GitHub Actions**로 두면 푸시 시 자동 배포.
+
+---
+
 ## GitHub Pages 배포
 
 1. GitHub 저장소 **Settings → Pages** 이동
-2. **Source**: `Deploy from a branch`
-3. **Branch**: `main` / `/ (root)` → Save
+2. **Source**: **GitHub Actions** (권장 — `deploy.yml` 사용)
+3. 또는 **Deploy from a branch** → Branch: `main` / `/ (root)` → Save
 4. `https://<username>.github.io/project-board` 에서 접근 가능
 
 `project-board.html`이 루트에 있으므로 별도 빌드 없이 즉시 서빙됩니다.
