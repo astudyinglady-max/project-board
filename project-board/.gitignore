@@ -73,3 +73,6 @@ docker-compose.override.yml
 .workflow/state.json
 .workflow/state.js
 .workflow/status.md
+
+# 내부 참고용 (과제 점수 관련 문서 — 커밋 제외)
+docs/89점-달성-로드맵.md

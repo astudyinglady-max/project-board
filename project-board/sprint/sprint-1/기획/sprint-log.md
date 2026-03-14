@@ -141,5 +141,141 @@ localStorage 용량 초과(5~10MB) 가능성이 낮지만, `try-catch`로 `setIt
 | 차별화 포인트 | `docs/차별화.md` | ✅ |
 | 기술 스택 근거 | `docs/기술스택.md` | ✅ |
 | 스프린트 1 이슈 목록 | `sprint/sprint-1/기획/이슈목록.md` | ✅ |
-| 폴더 구조 문서 | `docs/폴더구조.md` | ⚠️ 미완료 |
+| 폴더 구조 문서 | `docs/폴더구조.md` | ✅ 보완 완료 |
 | 스프린트 로그 | `sprint/sprint-1/기획/sprint-log.md` | ✅ |
+
+---
+
+## 2026-03-13 ~ 14 — Sprint 1 / Phase 2: 디자인
+
+---
+
+### 확정 산출물
+
+| 이슈 | 산출물 | 상태 |
+|------|--------|------|
+| [디자인-01] 디자인 시스템 정의 | `docs/디자인.md` | ✅ 컬러·타이포·간격·컴포넌트 규칙 확정 |
+| [디자인-02] 컴포넌트 목록 설계 | `docs/컴포넌트목록.md` | ✅ 상태(default/hover/focus/disabled) 정의 포함 |
+| [디자인-03] 페이지 & 사용자 흐름 설계 ★QA | `docs/페이지목록.md`, `docs/사용자흐름.md` | ✅ QC 완료 |
+| 부속 작업 | `style/project-board.css` | ✅ CSS 외부 파일 분리 도입 |
+
+### 주요 결정
+
+- **컬러 시스템**: CSS Custom Properties 기반 — `--indigo`, `--emerald`, `--gray-*` 계열 확정. Primary(인디고), 성공(에메랄드), Neutral(그레이) 3축 체계.
+- **타이포그래피**: 시스템 폰트 스택 유지, h1~h4 + body + caption 스케일 정의.
+- **간격 시스템**: 4px 기준 배수(4/8/12/16/24/32/48px) 확정.
+- **브레이크포인트**: 360px / 768px / 1440px 3단계 반응형.
+- **CSS 파일 분리**: `style/project-board.css` 생성 — `project-board.html` 전용 스타일 외부화, `<link rel="stylesheet">` 임포트 방식 확정.
+- **컴포넌트 목록**: 버튼(primary/ghost/icon), 카드, 모달, 토스트, 체크박스, 진행률 바, 탭 등 공통 컴포넌트 8종 정의.
+
+### Phase 2 QC 결과
+
+| 체크 항목 | 결과 |
+|----------|------|
+| 컬러 시스템에 Primary/Status/Neutral이 모두 정의되어 있는가? | ✅ |
+| 타이포그래피 스케일이 h1~caption까지 정의되어 있는가? | ✅ |
+| 4px 기반 간격 시스템이 적용 예시와 함께 명시되어 있는가? | ✅ |
+| 3개 페이지의 레이아웃·URL·컴포넌트가 페이지목록.md에 정의되었는가? | ✅ |
+| 핵심 시나리오 3가지가 단계별로 사용자흐름.md에 서술되었는가? | ✅ |
+
+### 다음 단계
+
+- Phase 3 프론트엔드 구현 착수 — 랜딩(project-board.html), 보드(docs/index.html), 워크플로우(docs/workflow.html)
+
+---
+
+## 2026-03-14 — Sprint 1 / Phase 3: 프론트엔드
+
+---
+
+### 구현 완료 페이지/기능
+
+| 항목 | 파일 | 주요 기능 |
+|------|------|----------|
+| 랜딩 페이지 | `project-board.html` + `style/project-board.css` | Hero 섹션, 기능 소개, CTA, 상대 경로 링크 수정 |
+| 프로젝트 보드 | `docs/index.html` | 멀티 프로젝트, Phase/Step 체크, JSON 백업·복원, localStorage(`pb_state`) |
+| 워크플로우 가이드 | `docs/workflow.html` | 6 Phase 진행, 프롬프트 원클릭 복사, QC 체크리스트, localStorage(`ccwf_v5`) |
+
+### 추가 도입
+
+- `package.json` + `package-lock.json` — Playwright·ESLint devDependencies 관리
+- `playwright.config.ts` — E2E 설정 (python3 http.server 8080 자동 기동)
+- `tests/e2e/` — Playwright 스펙 3개 파일
+
+### 검증
+
+| 스펙 | 테스트 수 | 커버 시나리오 |
+|------|-----------|--------------|
+| `landing.spec.ts` | 6개 | 페이지 로드, Hero, 네비 링크, 앵커 스크롤, 복사 버튼 |
+| `workflow.spec.ts` | 19개 | Phase 표시, 열기·접기, 프롬프트 복사, QC 체크, 진도율, localStorage 유지, 초기화, 모바일 375px |
+| `project-board.spec.ts` | 17개 | 빈 상태, 프로젝트 추가·보드 이동, Step 체크·진도율, 탭 전환, JSON 내보내기, 리로드 영속성, 모바일 |
+| **합계** | **42개** | 랜딩·워크플로우·보드 전 플로우 커버 |
+
+- 반응형: 기본 뷰포트 + 모바일(375px) 일부 시나리오 검증
+- GitHub Pages 상대 경로 오류 수정 완료 (a27ea2a)
+- 파비콘 404 제거 완료 (26bc511)
+
+### Phase 3 QC 결과
+
+| 체크 항목 | 결과 |
+|----------|------|
+| 3개 HTML 파일이 GitHub Pages에서 정상 접근되는가? | ✅ |
+| Playwright E2E 42개 전체 통과되는가? | ✅ |
+| localStorage 상태가 새로고침 후 유지되는가? | ✅ |
+| 외부 라이브러리·CDN 의존성이 없는가? | ✅ |
+| 브라우저 콘솔에 404/CORS 에러가 없는가? | ✅ |
+
+### 다음 단계
+
+- Phase 4 CI/CD 도입 — ESLint + Playwright E2E GitHub Actions 연동
+
+---
+
+## 2026-03-14 — Sprint 1 / Phase 4: 백엔드·CI/CD
+
+---
+
+### 완료 항목
+
+| 이슈 | 산출물 | 상태 |
+|------|--------|------|
+| [백엔드-03] GitHub Actions CI 설정 | `.github/workflows/ci.yml` | ✅ ESLint + Playwright E2E |
+| [백엔드-04] GitHub Actions 자동 배포 설정 | `.github/workflows/deploy.yml` | ✅ master/main → GitHub Pages |
+| ESLint 도입 | `eslint.config.js` | ✅ 0 warnings 기준 |
+| .github/ 위치 확정 | 저장소 루트(`.github/`) | ✅ 243a878 — 루트 이동으로 GitHub 인식 수정 |
+| .nojekyll 추가 | 저장소 루트 | ✅ GitHub Pages Jekyll 처리 방지 |
+
+### CI 구성 상세
+
+**ci.yml** — PR/푸시 시 자동 실행 (트리거: `master`, `main`, `develop`)
+
+| Job | 내용 |
+|-----|------|
+| `lint` | Node 20, `npm ci`, `npx eslint . --max-warnings 0` |
+| `e2e` | Node 20, Playwright Chromium, python3 http.server 8080 기동, `npx playwright test` |
+
+**deploy.yml** — `master`/`main` 푸시 시 자동 배포
+
+| 단계 | 내용 |
+|------|------|
+| Upload artifact | `project-board/` 폴더를 사이트 루트로 업로드 |
+| Deploy | `actions/deploy-pages@v4` → GitHub Pages 배포 |
+
+### 검증
+
+- CI: `master` 브랜치 push 시 ESLint + E2E 자동 실행 확인 (마지막 통과: 2026-03-14)
+- 배포: `https://astudyinglady-max.github.io/project-board` 정상 접속 확인
+- `.github/` 위치 문제 수정 후 Actions 탭 정상 인식 확인
+
+### Phase 4 QC 결과
+
+| 체크 항목 | 결과 |
+|----------|------|
+| PR 생성 시 CI가 자동 트리거되는가? | ✅ |
+| ESLint 오류 시 워크플로우가 실패하는가? | ✅ |
+| main 머지 시 GitHub Pages 자동 배포되는가? | ✅ |
+| working-directory가 `project-board`로 올바르게 설정되었는가? | ✅ |
+
+### 다음 단계
+
+- Phase 5 스프린트 마무리 — E2E 추가 보강, 스프린트 회고 작성, 다음 스프린트 계획 수립

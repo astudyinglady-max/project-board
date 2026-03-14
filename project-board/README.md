@@ -1,5 +1,7 @@
 # claude-commin-kit
 
+[![CI](https://github.com/astudyinglady-max/project-board/actions/workflows/ci.yml/badge.svg)](https://github.com/astudyinglady-max/project-board/actions/workflows/ci.yml)
+
 > AI(Claude)와 함께 스프린트 단위로 개발하는 솔로 개발자를 위한 **브라우저 전용 워크플로우 툴킷**
 
 설치도, 계정도, 빌드도 필요 없습니다. HTML 파일을 브라우저로 열면 즉시 작동합니다.
@@ -172,14 +174,16 @@ node kit/cli.mjs sync
 | 구분 | 내용 |
 |------|------|
 | **E2E** | Playwright — `tests/e2e/` (landing 6, workflow 19, project-board 17 = **42개**). 모바일 375px 시나리오 포함. |
-| **실행** | `npm test` (로컬 서버 자동 기동) / CI에서 PR·푸시 시 자동 실행. |
-| **단위 테스트** | 현재 없음. 정적 HTML/JS·빌드 없음 구조라 선택 도입 예정. |
-| **커버리지** | E2E는 시나리오 커버리지(랜딩·워크플로우·보드 핵심 플로우). 수치 리포트는 미도입. |
+| **단위 테스트** | Node 내장 `node:test` — `tests/unit/`에서 **핵심 JS 모듈**만 대상. 현재 `kit/state-utils.mjs`(진행률 계산) 1곳, 4개 케이스. |
+| **실행** | E2E: `npm test` (로컬 서버 자동 기동) / CI에서 PR·푸시 시 자동 실행. 단위: `npm run test:unit`. |
+| **범위** | E2E는 핵심 사용자 플로우 전부. 단위는 파일 시스템·DOM에 의존하지 않는 순수 함수 위주로 점진 확대. |
+| **커버리지** | E2E는 시나리오 커버리지(랜딩·워크플로우·보드). 단위·E2E 수치 리포트는 미도입. |
 
 ```bash
 npm test              # E2E 전체 실행
-npm run test:ui       # UI 모드
-npm run test:report   # HTML 리포트 확인
+npm run test:unit     # 단위 테스트 (state-utils 등)
+npm run test:ui       # E2E UI 모드
+npm run test:report   # E2E HTML 리포트 확인
 ```
 
 ---
@@ -187,6 +191,8 @@ npm run test:report   # HTML 리포트 확인
 ## CI/CD 및 자동화
 
 워크플로우는 **저장소 루트** `.github/workflows/` 에 있습니다 (이 프로젝트는 루트에 `project-board/` 폴더가 있는 구조).
+
+> **PR 머지 전 CI 통과 필수** — Pull Request는 ESLint + Playwright E2E가 모두 통과한 뒤에만 머지합니다.
 
 | 파일 | 트리거 | 내용 |
 |------|--------|------|
@@ -216,6 +222,7 @@ npm run test:report   # HTML 리포트 확인
 | [요구사항](./docs/요구사항.md) | Must Have / Should Have / Nice to Have 분류 |
 | [유저스토리](./docs/유저스토리.md) | 16개 유저스토리 + 수용 기준 |
 | [차별화](./docs/차별화.md) | 문제 정의, 기존 솔루션 한계, 핵심 강점 |
+| [접근성 체크리스트](./docs/접근성-체크리스트.md) | WCAG AA 검증 항목 (컬러 대비, 포커스, 키보드, 대체 텍스트) |
 | [워크플로우 상태](./.workflow/status.md) | 자동 생성 — 현재 진행 상태 |
 
 ---

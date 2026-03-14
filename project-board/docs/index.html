@@ -5,66 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:,">
 <title>Project Board</title>
+<script>(function(){const s=localStorage.getItem('theme'),p=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=s||p})()</script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
-  :root{--purple:#8b5cf6;--pink:#ec4899;--blue:#0ea5e9;--green:#10b981;--amber:#f59e0b;--slate:#0f172a}
+  :root{
+    --purple:#8b5cf6;--pink:#ec4899;--blue:#0ea5e9;--green:#10b981;--amber:#f59e0b;--slate:#0f172a;
+    --bg-page:#f1f5f9;--bg-card:#ffffff;
+    --text-main:#1e293b;--text-sub:#475569;
+    --border:#e2e8f0;--input-bg:#ffffff;
+    --gray-400:#94a3b8;
+  }
+  [data-theme="dark"]{
+    --bg-page:#0f172a;--bg-card:#1e293b;
+    --text-main:#f1f5f9;--text-sub:#94a3b8;
+    --border:#334155;--input-bg:#0f172a;
+  }
+  body{font-family:'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-main);min-height:100vh}
 
   /* HEADER */
-  .header{background:#fff;border-bottom:1px solid #e2e8f0;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px;font-weight:700;color:#1e293b}
-  .header-right{display:flex;gap:8px}
+  .header{background:var(--bg-card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .header h1{font-size:18px;font-weight:700;color:var(--text-main)}
+  .header-right{display:flex;gap:8px;align-items:center}
   .btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s}
   .btn-primary{background:#6366f1;color:#fff}
   .btn-primary:hover{background:#4f46e5}
-  .btn-outline{background:#fff;color:#475569;border:1px solid #e2e8f0}
-  .btn-outline:hover{background:#f8fafc}
+  .btn-outline{background:var(--bg-card);color:var(--text-sub);border:1px solid var(--border)}
+  .btn-outline:hover{background:var(--bg-page)}
   .btn-danger{background:#fee2e2;color:#dc2626;border:1px solid #fecaca}
+  .theme-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px 8px;border-radius:8px;transition:background .15s;line-height:1}
+  .theme-btn:hover{background:var(--bg-page)}
 
   /* TABS */
-  .tabs{display:flex;gap:4px;padding:16px 24px 0;background:#fff;border-bottom:1px solid #e2e8f0}
-  .tab{padding:8px 16px;border-radius:8px 8px 0 0;font-size:13px;font-weight:600;cursor:pointer;color:#64748b;border:1px solid transparent;border-bottom:none;transition:all .15s}
-  .tab.active{background:#f8fafc;color:#6366f1;border-color:#e2e8f0;margin-bottom:-1px;border-bottom:1px solid #f8fafc}
+  .tabs{display:flex;gap:4px;padding:16px 24px 0;background:var(--bg-card);border-bottom:1px solid var(--border)}
+  .tab{padding:8px 16px;border-radius:8px 8px 0 0;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-sub);border:1px solid transparent;border-bottom:none;transition:all .15s}
+  .tab.active{background:var(--bg-page);color:#6366f1;border-color:var(--border);margin-bottom:-1px;border-bottom:1px solid var(--bg-page)}
 
   /* MAIN */
   .main{padding:20px 24px;max-width:1100px;margin:0 auto}
 
   /* PROJECT LIST */
   .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:20px}
-  .project-card{background:#fff;border-radius:12px;border:1.5px solid #e2e8f0;padding:16px;cursor:pointer;transition:all .15s}
+  .project-card{background:var(--bg-card);border-radius:12px;border:1.5px solid var(--border);padding:16px;cursor:pointer;transition:all .15s}
   .project-card:hover{border-color:#6366f1;box-shadow:0 4px 12px rgba(99,102,241,.1)}
   .project-card.selected{border-color:#6366f1;box-shadow:0 4px 12px rgba(99,102,241,.15)}
   .pc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-  .pc-title{font-size:15px;font-weight:700;color:#1e293b}
+  .pc-title{font-size:15px;font-weight:700;color:var(--text-main)}
   .pc-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
   .badge-active{background:#dbeafe;color:#1d4ed8}
   .badge-done{background:#dcfce7;color:#15803d}
   .badge-hold{background:#fef3c7;color:#b45309}
-  .pc-progress-wrap{background:#e2e8f0;border-radius:999px;height:6px;margin:8px 0}
+  .pc-progress-wrap{background:var(--border);border-radius:999px;height:6px;margin:8px 0}
   .pc-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#6366f1,#0ea5e9);transition:width .4s}
-  .pc-meta{display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-top:6px}
+  .pc-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text-sub);margin-top:6px}
   .pc-actions{display:flex;gap:6px;margin-top:10px}
 
   /* ADD PROJECT FORM */
-  .form-card{background:#fff;border-radius:12px;border:1.5px solid #e2e8f0;padding:20px;margin-bottom:20px}
+  .form-card{background:var(--bg-card);border-radius:12px;border:1.5px solid var(--border);padding:20px;margin-bottom:20px}
   .form-title{font-size:15px;font-weight:700;margin-bottom:14px}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .form-group{display:flex;flex-direction:column;gap:4px}
   .form-group.full{grid-column:1/-1}
-  label{font-size:12px;font-weight:600;color:#475569}
-  input,select,textarea{padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;color:#1e293b;background:#fff;font-family:inherit}
+  label{font-size:12px;font-weight:600;color:var(--text-sub)}
+  input,select,textarea{padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-main);background:var(--input-bg);font-family:inherit}
   input:focus,select:focus,textarea:focus{outline:none;border-color:#6366f1}
   textarea{resize:vertical;min-height:60px}
 
   /* BOARD */
-  .board-header{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:16px 20px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+  .board-header{background:var(--bg-card);border-radius:12px;border:1px solid var(--border);padding:16px 20px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
   .board-title{font-size:17px;font-weight:700}
   .board-stats{display:flex;gap:12px}
   .stat{text-align:center}
   .stat-num{font-size:18px;font-weight:700;color:#6366f1}
-  .stat-label{font-size:11px;color:#94a3b8}
+  .stat-label{font-size:11px;color:var(--gray-400)}
 
-  .phase-block{background:#fff;border-radius:12px;border:1.5px solid #e2e8f0;margin-bottom:12px;overflow:hidden;transition:border .2s}
+  .phase-block{background:var(--bg-card);border-radius:12px;border:1.5px solid var(--border);margin-bottom:12px;overflow:hidden;transition:border .2s}
   .phase-block.ph-0{border-left:4px solid var(--slate)}
   .phase-block.ph-1{border-left:4px solid var(--purple)}
   .phase-block.ph-2{border-left:4px solid var(--pink)}
@@ -76,36 +90,37 @@
   .phase-head-left{display:flex;align-items:center;gap:10px}
   .phase-num{width:26px;height:26px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .phase-info .name{font-size:14px;font-weight:700}
-  .phase-info .sub{font-size:11px;color:#94a3b8}
-  .phase-progress{display:flex;align-items:center;gap:8px;font-size:12px;color:#64748b}
-  .mini-bar{width:80px;height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+  .phase-info .sub{font-size:11px;color:var(--gray-400)}
+  .phase-progress{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-sub)}
+  .mini-bar{width:80px;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
   .mini-fill{height:100%;border-radius:999px;transition:width .3s}
 
   .phase-body{padding:0 16px 14px;display:none}
   .phase-body.open{display:block}
 
-  .step-item{border:1px solid #f1f5f9;border-radius:8px;margin-bottom:8px;overflow:hidden}
+  .step-item{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;background:var(--bg-card)}
   .step-item.qa-step{border-color:#fde047;background:#fefce8}
+  [data-theme="dark"] .step-item.qa-step{background:#2a1d00;border-color:#9d7a00}
   .step-head{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer}
-  .step-check{width:20px;height:20px;border-radius:5px;border:2px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s}
+  .step-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s}
   .step-check.done{background:#10b981;border-color:#10b981}
-  .step-label{flex:1;font-size:13px;font-weight:600;color:#1e293b}
-  .step-label.done{text-decoration:line-through;color:#94a3b8}
+  .step-label{flex:1;font-size:13px;font-weight:600;color:var(--text-main)}
+  .step-label.done{text-decoration:line-through;color:var(--gray-400)}
   .step-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:#6366f1;color:#fff;font-weight:700}
   .step-meta{display:flex;gap:6px;align-items:center}
   .assignee-tag{font-size:11px;padding:2px 7px;border-radius:20px;font-weight:600}
 
-  .step-detail{padding:10px 12px;border-top:1px solid #f1f5f9;background:#fafafa}
+  .step-detail{padding:10px 12px;border-top:1px solid var(--border);background:var(--bg-page)}
   .detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
   .detail-field{display:flex;flex-direction:column;gap:3px}
-  .detail-field label{font-size:11px;font-weight:600;color:#64748b}
+  .detail-field label{font-size:11px;font-weight:600;color:var(--text-sub)}
   .detail-field input,
   .detail-field select{font-size:12px;padding:5px 8px}
-  .memo-area{width:100%;padding:8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;resize:vertical;min-height:50px;font-family:inherit}
+  .memo-area{width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:12px;resize:vertical;min-height:50px;font-family:inherit;background:var(--input-bg);color:var(--text-main)}
   .memo-area:focus{outline:none;border-color:#6366f1}
   .comments{margin-top:8px}
-  .comment-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12px}
-  .comment-meta{color:#94a3b8;font-size:11px;margin-bottom:3px}
+  .comment-item{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12px}
+  .comment-meta{color:var(--gray-400);font-size:11px;margin-bottom:3px}
   .comment-input-row{display:flex;gap:6px;margin-top:6px}
   .comment-input-row input{flex:1;font-size:12px;padding:6px 10px}
   .comment-input-row button{padding:6px 12px;font-size:12px;background:#6366f1;color:#fff;border:none;border-radius:6px;cursor:pointer}
@@ -115,11 +130,11 @@
   .role-디자인{background:#fce7f3;color:#be185d}
   .role-프론트{background:#e0f2fe;color:#0369a1}
   .role-백엔드{background:#d1fae5;color:#065f46}
-  .role-전체{background:#f1f5f9;color:#475569}
+  .role-전체{background:var(--bg-page);color:var(--text-sub)}
 
-  .empty-state{text-align:center;padding:48px;color:#94a3b8;font-size:14px}
-  .divider{height:1px;background:#e2e8f0;margin:12px 0}
-  .toggle-arrow{font-size:14px;color:#94a3b8;transition:transform .2s}
+  .empty-state{text-align:center;padding:48px;color:var(--gray-400);font-size:14px}
+  .divider{height:1px;background:var(--border);margin:12px 0}
+  .toggle-arrow{font-size:14px;color:var(--gray-400);transition:transform .2s}
   .toggle-arrow.open{transform:rotate(180deg)}
 
   @media(max-width:600px){
@@ -128,6 +143,11 @@
     .board-stats{gap:8px}
     .main{padding:12px}
   }
+  @media(max-width:400px){
+    .detail-grid{grid-template-columns:1fr}
+    .main{padding:8px}
+    .tab{font-size:12px}
+  }
 </style>
 </head>
 <body>
@@ -135,6 +155,7 @@
 <div class="header">
   <h1>⚡ Project Board</h1>
   <div class="header-right">
+    <button class="theme-btn" id="theme-btn">🌙</button>
     <button class="btn btn-outline" onclick="exportData()">📥 내보내기</button>
     <button class="btn btn-primary" onclick="showTab('projects')">+ 프로젝트</button>
   </div>
@@ -180,7 +201,7 @@
       <div class="board-header">
         <div>
           <div class="board-title" id="board-proj-name"></div>
-          <div style="font-size:12px;color:#94a3b8;margin-top:2px" id="board-proj-desc"></div>
+          <div style="font-size:12px;color:var(--gray-400);margin-top:2px" id="board-proj-desc"></div>
         </div>
         <div class="board-stats">
           <div class="stat"><div class="stat-num" id="stat-pct">0%</div><div class="stat-label">전체 진도</div></div>
@@ -357,7 +378,7 @@ function renderProjects(){
         <div class="pc-title">${p.name}</div>
         <span class="pc-badge ${statusClass[p.status]}">${statusLabel[p.status]}</span>
       </div>
-      ${p.desc?`<div style="font-size:12px;color:#64748b;margin-bottom:6px">${p.desc}</div>`:''}
+      ${p.desc?`<div style="font-size:12px;color:var(--text-sub);margin-bottom:6px">${p.desc}</div>`:''}
       <div class="pc-progress-wrap"><div class="pc-progress-fill" style="width:${pct}%"></div></div>
       <div class="pc-meta">
         <span>${done}/${total} 완료 (${pct}%)</span>
@@ -420,7 +441,7 @@ function renderBoard(){
               <div class="step-label${isDone?' done':''}" onclick="toggleDetail('${step.id}')">${step.label}${step.isQC?' ✅':''}</div>
               ${step.qa?'<span class="step-badge">★ QA</span>':''}
               <span class="assignee-tag role-${role}" style="font-size:11px;padding:2px 7px;border-radius:20px;font-weight:600">${role}</span>
-              <span style="font-size:14px;color:#94a3b8;cursor:pointer" onclick="toggleDetail('${step.id}')">⋯</span>
+              <span style="font-size:14px;color:var(--gray-400);cursor:pointer" onclick="toggleDetail('${step.id}')">⋯</span>
             </div>
             <div class="step-detail" id="detail-${step.id}" style="display:none">
               <div class="detail-grid">
@@ -439,10 +460,10 @@ function renderBoard(){
                   <input type="date" value="${s.deadline||''}" onchange="updateStep('${step.id}','deadline',this.value)">
                 </div>
               </div>
-              <label style="font-size:11px;font-weight:600;color:#64748b;display:block;margin-bottom:4px">메모</label>
+              <label style="font-size:11px;font-weight:600;color:var(--text-sub);display:block;margin-bottom:4px">메모</label>
               <textarea class="memo-area" placeholder="메모를 남겨보세요..." onchange="updateStep('${step.id}','memo',this.value)">${s.memo||''}</textarea>
               <div class="divider"></div>
-              <label style="font-size:11px;font-weight:600;color:#64748b;display:block;margin-bottom:6px">💬 코멘트</label>
+              <label style="font-size:11px;font-weight:600;color:var(--text-sub);display:block;margin-bottom:6px">💬 코멘트</label>
               <div class="comments" id="comments-${step.id}">
                 ${(s.comments||[]).map((c,i)=>`<div class="comment-item">
                   <div class="comment-meta">${c.author} · ${c.date}</div>
@@ -510,6 +531,18 @@ function exportData(){
   a.download = 'project-board-backup.json'; a.click();
 }
 
+function toggleTheme(){
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+  updateThemeBtn();
+}
+function updateThemeBtn(){
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙';
+}
+document.getElementById('theme-btn').addEventListener('click', toggleTheme);
+updateThemeBtn();
 mergeCliState();
 renderProjects();
 </script>

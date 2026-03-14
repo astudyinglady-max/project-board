@@ -82,18 +82,26 @@ project-board/
 ├── README.md                # 프로젝트 소개 및 실행 가이드
 ├── CLAUDE.md                # 이 파일 — Claude Code 작업 지침
 │
-├── docs/                    # GitHub Pages 서빙 폴더 + 기획 문서
+├── docs/                    # GitHub Pages 서빙 폴더 + 기획·운영 문서
 │   ├── index.html           # 프로젝트 보드 (칸반 UI)
 │   ├── workflow.html        # 워크플로우 가이드 UI
 │   ├── 요구사항.md           # Must Have / Should Have / Nice to Have
 │   ├── 유저스토리.md          # 유저스토리 16개 + 수용 기준 + Sprint 배정
-│   ├── 차별화.md             # 문제 정의, 기존 솔루션 한계, 경쟁 우위 매트릭스
-│   ├── 기술스택.md           # 기술 선택 이유 및 대안 비교
-│   ├── 폴더구조.md           # 디렉토리 구조 및 폴더 역할
-│   └── 브랜치전략.md         # Git 브랜치 전략 및 PR 규칙
+│   ├── 차별화.md             # 문제 정의, 기존 솔루션 한계, 경쟁 우위·구현 현황
+│   ├── 기술스택.md           # 기술 선택 이유 및 대안 비교, 검증 현황
+│   ├── 폴더구조.md           # 디렉토리 구조, 폴더 역할, CI/CD 파이프라인
+│   ├── 브랜치전략.md         # Git 브랜치 전략 및 PR 규칙
+│   ├── 디자인.md             # 디자인 시스템 (컬러, 타이포, 간격, 컴포넌트)
+│   ├── 컴포넌트목록.md       # 공통 컴포넌트 목록·상태·사용 예시
+│   ├── 페이지목록.md         # 3개 페이지 레이아웃·URL·필요 컴포넌트
+│   ├── 사용자흐름.md         # 핵심 시나리오 3가지 단계별 흐름
+│   ├── GitHub-Projects-설정.md # GitHub Projects 보드 설정 가이드
+│   ├── 접근성-체크리스트.md   # WCAG AA 검증 항목 (컬러 대비, 포커스, 키보드)
+│   └── CI-실행-가이드.md     # CI GitHub 트리거·로컬 동일 검사 실행 방법
 │
 ├── kit/                     # 로컬 CLI (프로젝트별 커스터마이징 가능)
-│   └── cli.mjs              # Node.js CLI 진입점
+│   ├── cli.mjs              # Node.js CLI 진입점 (12개 명령어)
+│   └── state-utils.mjs      # 순수 함수 유틸 (진행률 계산 등, 단위 테스트 대상)
 │
 ├── .kit/                    # git submodule — claude-code-kit 업스트림 (수정 금지)
 │
@@ -108,8 +116,13 @@ project-board/
 │   └── project-board.css    # project-board.html 전용 스타일시트
 ├── agents/                  # Claude Code 에이전트 정의
 ├── skills/                  # Claude Code 슬래시 커맨드 스킬
+├── tests/                   # E2E(Playwright) + 단위(Node node:test)
+│   ├── e2e/                 # 42개 E2E 스펙
+│   └── unit/                # 핵심 JS 단위 테스트 (state-utils 등)
 └── sprint/                  # 스프린트별 로그 및 이슈 목록
-    └── sprint-1/기획/        # Phase별 하위 폴더 구조
+    ├── sprint-1/기획/        # Phase 1 스프린트 로그, 이슈목록, 회고
+    ├── sprint-2/             # 스프린트 2 계획, 회고
+    └── sprint-3/             # 스프린트 3 계획
 ```
 
 ---
@@ -343,3 +356,16 @@ node kit/cli.mjs git-finish <phase-id>  # commit + push
 | 3 | 프론트엔드 | 컴포넌트, 페이지, API 연동, 단위 테스트 |
 | 4 | 백엔드 | API, DB, 인증, CI/CD |
 | 5 | 스프린트 마무리 | E2E 테스트, 회고, 다음 계획 |
+
+**이 프로젝트에서의 대응** (서버리스 툴킷이라 Phase 3·4는 전통적 API/DB 없음):
+
+| Phase | 실제 산출물 |
+|-------|-------------|
+| 0 | `.gitignore`, `.github/PULL_REQUEST_TEMPLATE.md`, `docs/브랜치전략.md` |
+| 1 | `README.md`, `docs/요구사항.md`, `docs/유저스토리.md`, `docs/기술스택.md`, `docs/차별화.md` + 이슈목록, sprint-log |
+| 2 | `docs/디자인.md`, `docs/컴포넌트목록.md`, `docs/페이지목록.md`, `docs/사용자흐름.md` |
+| 3 | 3개 페이지(`project-board.html`, `docs/index.html`, `docs/workflow.html`), CLI↔state.js 연동, `tests/unit/`(핵심 JS) |
+| 4 | CI/CD(`.github/workflows/ci.yml`, `deploy.yml`) — API/DB/인증은 Out of Scope |
+| 5 | `tests/e2e/`(42개), `sprint/sprint-1/스프린트1-회고.md`, `sprint/sprint-2/스프린트2-계획.md`, `sprint/sprint-2/스프린트2-회고.md`, `sprint/sprint-3/스프린트3-계획.md` |
+
+그 외 참고 문서: `docs/폴더구조.md`, `docs/접근성-체크리스트.md`, `docs/89점-달성-로드맵.md`, `docs/CI-실행-가이드.md`, `sprint/sprint-1/phase-log-가이드.md` 등은 워크플로우 표에 없는 보조 산출물이다.
