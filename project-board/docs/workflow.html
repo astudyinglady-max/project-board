@@ -335,9 +335,24 @@ function toggleSection(key){
 }
 
 function copyPrompt(btn, text){
-  navigator.clipboard.writeText(text);
-  btn.textContent='✓ 복사됨'; btn.className='copy-btn done';
-  setTimeout(()=>{ btn.textContent='복사'; btn.className='copy-btn'; },1500);
+  function setDone(){
+    btn.textContent='✓ 복사됨'; btn.className='copy-btn done';
+    setTimeout(function(){ btn.textContent='복사'; btn.className='copy-btn'; },1500);
+  }
+  try {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      var p = navigator.clipboard.writeText(text);
+      if (p && typeof p.then === 'function') {
+        p.then(setDone).catch(setDone);
+      } else {
+        setDone();
+      }
+    } else {
+      setDone();
+    }
+  } catch (e) {
+    setDone();
+  }
 }
 
 function render(){

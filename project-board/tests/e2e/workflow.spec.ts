@@ -61,7 +61,8 @@ test.describe('워크플로우 가이드 (docs/workflow.html)', () => {
     const copyBtn = page.locator('#sb-0-s-0 .copy-btn').first();
     await copyBtn.click();
 
-    await expect(copyBtn).toHaveClass(/done/);
+    // 클립보드 처리 후 UI 갱신 대기 (헤드리스/CI에서 Promise 기반 동작 반영)
+    await expect(copyBtn).toHaveClass(/done/, { timeout: 3000 });
     await expect(copyBtn).toContainText('복사됨');
   });
 
