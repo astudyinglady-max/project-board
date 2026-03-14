@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     ├── project-board.html # 브랜딩 랜딩 페이지
     ├── docs/              # GitHub Pages 서빙 폴더 + 기획 문서
     ├── kit/cli.mjs        # Node.js CLI — 12개 워크플로우 명령어
-    ├── .kit/              # git submodule (claude-commin-kit 업스트림, 수정 금지)
+    ├── .kit/              # git submodule (claude-code-kit 업스트림, 수정 금지)
     └── .workflow/         # 워크플로우 런타임 (config.json, state.json 등)
 ```
 
@@ -41,7 +41,7 @@ python -m http.server 8080 --directory project-board
 
 ## Git Submodule
 
-`project-board/.kit/`은 `https://github.com/astudyinglady-max/claude-commin-kit.git` 업스트림 submodule입니다.
+`project-board/.kit/`은 `https://github.com/astudyinglady-max/claude-code-kit.git` 업스트림 submodule입니다.
 
 ```bash
 # 최초 클론 후 서브모듈 초기화
