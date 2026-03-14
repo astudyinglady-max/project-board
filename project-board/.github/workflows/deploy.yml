@@ -1,9 +1,9 @@
-# main 브랜치 머지 시 GitHub Pages 자동 배포
+# master(또는 main) 브랜치 푸시 시 GitHub Pages 자동 배포
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
 
 permissions:
   contents: read
@@ -30,7 +30,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          # 저장소 루트에 project-board/ 폴더만 있으므로, 해당 폴더를 사이트 루트로 배포
+          path: 'project-board'
 
       - name: Deploy to GitHub Pages
         id: deploy
